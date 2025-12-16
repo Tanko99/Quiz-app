@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link href="dist/output.css" rel="stylesheet" />
+</head>
+<body>
+    <header id="start-section" class=" bg-gray-200 font-poppins text-gray-800 mx-auto min-h-screen text-center
+    flex flex-col justify-center items-center mx-auto sm:px-6 px-4">
+        <h1 class="text-center font-extrabold md:text-5xl sm:text-2xl text-xl mt-8">The Ultimate Brain Challenge</h1>
+        <p class="mt-10 text-center md:text-3xl sm:text-xl text-lg font-bold"> How sharp is your mind? Take on our quick quizzes to find out and see where you rank on the leaderboards</p>
+        <article class="w-full mt-6 mx-auto">
+            <label for="category" class="block mb-2 font-medium text-lg">
+                Choose a subject
+            </label>
+            <select id="category"class="md:w-80 w-54 px-4 py-2 bg-gray-400 rounded-xl">
+                <option value="">Select a category</option>
+                <option value="javascript">JavaScript</option>
+                <option value="html">HTML</option>
+                <option value="react">React</option>
+                <option value="css">CSS</option>
+            </select>
+        </article>
+
+        <button id="start-btn" type="submit" class="px-4 py-2 rounded-2xl mt-8  cursor-pointer text-2xl
+        bg-blue-700 font-bold text-gray-100">
+            Start Now
+        </button>
+    </header>
+    <main class=" px-4  font-poppins ">
+        <section id="quiz-questions" class="hidden">
+            <header class="mb-6 text-center bg-gray-300r">
+                <p class="font-semibold md:text-2xl text-lg text-sm ">
+                    Question  <span id="current-question"></span> / <span id="total-questions"></span>
+                </p>
+            </header>
+            <article class="mb-8 bg-gray-300">
+                <h2 id="quiz-text" class="md:text-3xl text-lg font-bold text-center">
+                <!--the quiz questions goes here-->
+                </h2>
+            </article>
+            <form id="quiz-form" class="space-y-4 ">
+                <fieldset id="quiz-options">
+               <!--the verious quiz options will enter here-->
+                </fieldset> </fieldset>
+                    <button id="submit-btn" type="submit" class="px-4 py-2
+                    bg-accent text-xl text-white flex mx-auto  font-bold cursor pointer rounded-2xl">
+                     Submit 
+                  </button>
+            </form>
+            <div id="loading" class="mt-8 flex justify-center gap-2 hidden">
+               <!--bubbles for loading mext question-->
+            </div>
+            <footer class="mt-12 bg-gray-300 flex items-center justify-between">
+                <button type="button" aria-label="previous question">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <button type="button" aria-label="Next question">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </footer>
+        </section>
+        <section id="result-section" class="hidden">
+            <header class="">
+                <p class="">
+                    You Scored  <span id="score"></span> /<span id="total"></span>
+                </p>
+            </header>
+            <ul id="result-list" class="">
+                <!--list of all the question and remark, like either wrong or correct-->
+            </ul>
+            <footer>
+                <button type="submit" id="restart-btn">Retake Quiz</buuton>
+            </footer>
+        </section>
+    </main>
+    <script src="app.js"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    lucide.createIcons();
+  });
+</script>
+</body>
+</html>
