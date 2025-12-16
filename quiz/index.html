@@ -30,7 +30,7 @@
         </button>
     </header>
     <main class=" px-4  font-poppins ">
-        <section id="quiz-questions" class="hidden">
+        <section id="quiz-questions" class="">
             <header class="mb-6 text-center bg-gray-300r">
                 <p class="font-semibold md:text-2xl text-lg text-sm ">
                     Question  <span id="current-question"></span> / <span id="total-questions"></span>
@@ -54,10 +54,10 @@
                <!--bubbles for loading mext question-->
             </div>
             <footer class="mt-12 bg-gray-300 flex items-center justify-between">
-                <button type="button" aria-label="previous question">
+                <button type="button" id="prev-btn" aria-label="previous question">
                     <i data-lucide="chevron-left"></i>
                 </button>
-                <button type="button" aria-label="Next question">
+                <button type="button" id="next-btn" aria-label="Next question">
                     <i data-lucide="chevron-right"></i>
                 </button>
             </footer>
