@@ -8,10 +8,11 @@ const restartBtn = document.getElementById("RESTART-BTN");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const quizForm = document.getElementById("quiz-form");
-const answerOptions = document.getElementById("quiz-options");
+const optionContainer = document.getElementById("quiz-options");
 const questionText = document.getElementById("quiz-text");
-const currentQuestion = document.getElementById("current-question");
+const currentQuestionEl = document.getElementById("current-question");
 const totalQuestions = document.getElementById("total-questions");
+const categorySelect = document.getElementById("category");
 const ul = document.getElementById("result-list");
 const loadingEl = document.getElementById("loding");
 
@@ -53,6 +54,37 @@ function initApp(){
 //Run initApp when the page loads
 document.addEventListener("DOMContentLoaded", initApp);
 
-//This function acts a s a bridge between the start button and the quiz sxtion
+//This function acts a s a bridge between the start button and the quiz section
+//This hides the start and result sections and prompts the user to select category while questions are fetched
+function startQuiz(){
+    if(!categorySelect || !categorySelect.value){
+        alert("Please select a category and continue");
+        return;
+    }
+    selectedCategory = categorySelect.value;
+    questions = [];
+    currentQuestionIndex = 0;
+    score = 0;
+    userAnswer = [];
 
-function startQuiz(){}
+
+    //hide start section and result section but show the quiz section
+    startSection.classList.add("hidden");
+    resultSection.classList.add("hidden");
+    quizSection.classList.remove("hidden");
+
+    // fetch questions
+    fetchQuestions(selectedCategory)
+        .then(() => {
+            totalQuestions.textContent = questions.length;
+             renderQuestion();
+        })
+        .catch((error) => {
+            alert("Falled to load questions, please try again!");
+            console.error(error);
+        });
+}
+
+
+// Fetch questions from the Trivia API for quizzes
+async function fetchQuestions()
