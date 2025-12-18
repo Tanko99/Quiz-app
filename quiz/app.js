@@ -87,4 +87,29 @@ function startQuiz(){
 
 
 // Fetch questions from the Trivia API for quizzes
-async function fetchQuestions()
+async function fetchQuestions(category){
+    const categoryMap - {
+        javascript: 18,
+        html: 18,
+        react: 18,
+        css: 18
+    };
+    const categoryId = [categoryMap] || 18;
+    const API_URL = "https://opentdb.com/api.php?amount=10&category=${categoryId}&type=multiple";
+    const response = await fetch(API_URL);
+    if(!response.ok){
+        throw new Error("Failed to fetch quiz questions");
+    }
+    const data = await response.json();
+    // here we need to normalise the API data to dynamically fit the options and with correct and incorrecy answers
+    questions = data.results.map((items) => {
+        const options = [...items.incorrect_answer];
+        const correctIndex = Math.floor(Math.random() * (options.length + 1));
+        options.splice(correctIndex, 0, items.correct_answer);
+        return {
+            questions: items.question,
+            options,
+            correctIndex
+        };
+    });
+}
