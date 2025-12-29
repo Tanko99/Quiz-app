@@ -18,7 +18,7 @@ const loadingEl = document.getElementById("loding");
 
 // The app states are declared here.
 let questions = [];
-let currenteQuestionIndex = 0;
+let currentQuestionIndex = 0;
 let userAnswer = [];
 let score = 0;
 let selectedCategory = "";
@@ -32,8 +32,8 @@ function initApp(){
     selectedCategory = "";
     
     questionText.textContent = "";
-    answerOptions.innerHTML = "";
-    currentQuestion.textContent = "";
+    optionContainer.innerHTML = "";
+    currentQuestionEl.textContent = "";
     totalQuestions.textContent = "";
     
     //shows just the start section and then hides the rest of the sections
@@ -43,7 +43,7 @@ function initApp(){
 
     // Event listeners to buttons
     startBtn.addEventListener("click", startQuiz);
-    quizForm.addEventListener("click", handleSubmitAnswer);
+    quizForm.addEventListener("submit", handleSubmitAnswer);
     restartBtn.addEventListener("click", restartQuiz)
 
     if(prevBtn) prevBtn.addEventListener("click", goToPreviousQuestion);
@@ -88,28 +88,53 @@ function startQuiz(){
 
 // Fetch questions from the Trivia API for quizzes
 async function fetchQuestions(category){
-    const categoryMap - {
-        javascript: 18,
-        html: 18,
-        react: 18,
-        css: 18
-    };
-    const categoryId = [categoryMap] || 18;
-    const API_URL = "https://opentdb.com/api.php?amount=10&category=${categoryId}&type=multiple";
+    const categoryId = categorySelect;
+    const amount = 20;
+    const difficulty = 'hard';
+    const API_URL = "https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple";
     const response = await fetch(API_URL);
     if(!response.ok){
         throw new Error("Failed to fetch quiz questions");
     }
     const data = await response.json();
     // here we need to normalise the API data to dynamically fit the options and with correct and incorrecy answers
-    questions = data.results.map((items) => {
-        const options = [...items.incorrect_answer];
+    questions = data.results.map((item) => {
+        const options = [...item.incorrect_answers];
         const correctIndex = Math.floor(Math.random() * (options.length + 1));
         options.splice(correctIndex, 0, items.correct_answer);
         return {
-            questions: items.question,
+            questions: item.question,
             options,
             correctIndex
         };
     });
+}
+
+// This function renders questions one at a time.
+function renderQuestion(){
+    const currentQuestion = questions[currentQuestionIndex];
+    if(!currentQuestion) return;
+    questionText.textContent = currentQuestion.question;
+    // update question counter 
+    currentQuestionEl.textContent = currentQuestionIndex + 1;
+     // clear options 
+     optionContainer.innerHTML = "";
+
+     // create radio buttons for the 4 options per question
+     currentQuestion.options.forEach((option, index) => {
+          const label = document.createElement("label");
+          label.className = "flex items-center gap-3 cursor-pointer";
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "answer";
+          input.value = index;
+          label.appendChild(input);
+
+          const span = document.createElement("span");
+          span.textContent = option;
+          label.appendChild(span);
+
+          optionContainer.appendChild(label);
+
+     })
 }
