@@ -87,9 +87,9 @@ function startQuiz(){
 
 
 // Fetch questions from the Trivia API for quizzes
-async function fetchQuestions(category){
+async function fetchQuestions(selectedCategory){
     const categoryId = categorySelect;
-    const amount = 20;
+    const amount = 10;
     const difficulty = 'hard';
     const API_URL = "https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple";
     const response = await fetch(API_URL);
@@ -138,3 +138,29 @@ function renderQuestion(){
 
      })
 }
+
+ function handleSubmitAnswer (e){
+    const selectedOption = document.querySelector('input[name ="answer"]: checked');
+    const selectedIndex = Number(selectedOption.value);
+    if(!selectedOption){
+        alert("You must select an answer before submitting");
+        return;
+    }
+    const currentQuestion = questions[currentQuestionIndex];
+    const isCorrect = selectedIndex === currentQuestion.correctIndex;
+    if(isCorrect){
+        score += 1;
+    }
+    userAnswer.push({
+        questionIndex: currentQuestionIndex,
+        selectedIndex
+        correctIndex: currentQuestion.correctIndex,
+        isCorrect
+    });
+    showLoading();
+    setTimeout(() => {
+        hideLoading();
+        goToNextQuestion();
+    }, 5000);
+ }
+ 
