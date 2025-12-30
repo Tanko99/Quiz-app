@@ -163,4 +163,12 @@ function renderQuestion(){
         goToNextQuestion();
     }, 5000);
  }
- 
+
+ function showLoading(){
+    loadingEl.classList.remove("hidden");
+ }
+
+ function hideLoading(){
+    loadingEl.classList.add("hidden");
+ }
+
