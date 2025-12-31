@@ -14,7 +14,7 @@ const currentQuestionEl = document.getElementById("current-question");
 const totalQuestions = document.getElementById("total-questions");
 const categorySelect = document.getElementById("category");
 const ul = document.getElementById("result-list");
-const loadingEl = document.getElementById("loding");
+const loadingEl = document.getElementById("loading");
 
 // The app states are declared here.
 let questions = [];
@@ -170,5 +170,31 @@ function renderQuestion(){
 
  function hideLoading(){
     loadingEl.classList.add("hidden");
+ }
+
+ function showResults(){
+      quizSection.classList.add("hidden");
+      startSection.classList.add("hidden");
+      resultSection.classList.remove("hidden");
+
+      document.getElementById("score").textContent = score;
+      document.getElementById("total").textContent = questions.length;
+
+      ul.innerHTML = "";
+      userAnswer.forEach((answer, index) => {
+        const li = document.createElement("li");
+        li.className = "mb-4 p-4 rounded-xl border";
+        const p = document.createElement("p");
+        p.className = "font-medium"
+        p.innerHTML = `${index + 1}. ${questions[answer.questionIndex].question}`;
+
+        const remark = document.createElement("span");
+        remark.className = answer.isCorrect ? "text-green-600 font-bold" : "text-red-600 font-bold";
+        remark.textContent = answer.isCorrect ? "Correct" : "Wrong";
+
+        li.appendChild(remark);
+        li.appendChild(p);
+        ul.appendChild(li);
+      });
  }
 
