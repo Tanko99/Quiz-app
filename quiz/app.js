@@ -207,3 +207,9 @@ function renderQuestion(){
     }
  }
 
+ function goToPreviousQuestion(){
+    if(currentQuestionIndex === 0) return;
+    currentQuestionIndex--;
+    renderQuestion();
+ }
+
