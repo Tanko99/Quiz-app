@@ -44,7 +44,7 @@ function initApp(){
     // Event listeners to buttons
     startBtn.addEventListener("click", startQuiz);
     quizForm.addEventListener("submit", handleSubmitAnswer);
-    restartBtn.addEventListener("click", restartQuiz)
+    restartBtn.addEventListener("click", restartQuiz);
 
     if(prevBtn) prevBtn.addEventListener("click", goToPreviousQuestion);
     if(nextBtn) nextBtn.addEventListener("click", goToNextQuestion);
@@ -76,6 +76,7 @@ function startQuiz(){
     // fetch questions
     fetchQuestions(selectedCategory)
         .then(() => {
+            console.log("fetched questions", questions);
             totalQuestions.textContent = questions.length;
              renderQuestion();
         })
@@ -87,11 +88,19 @@ function startQuiz(){
 
 
 // Fetch questions from the Trivia API for quizzes
-async function fetchQuestions(selectedCategory){
-    const categoryId = categorySelect;
+async function fetchQuestions(category){
+    const categoryMap = {
+        computers: 18,
+        mathematics: 19,
+        generalknowledge: 9,
+        sports: 21,
+        nature: 17
+    };
+    const categoryKey = selectedCategory;
+    const categoryId = categoryMap[categoryKey];
     const amount = 10;
     const difficulty = 'hard';
-    const API_URL = "https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple";
+    const API_URL = `https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`;
     const response = await fetch(API_URL);
     if(!response.ok){
         throw new Error("Failed to fetch quiz questions");
@@ -101,9 +110,9 @@ async function fetchQuestions(selectedCategory){
     questions = data.results.map((item) => {
         const options = [...item.incorrect_answers];
         const correctIndex = Math.floor(Math.random() * (options.length + 1));
-        options.splice(correctIndex, 0, items.correct_answer);
+        options.splice(correctIndex, 0, item.correct_answer);
         return {
-            questions: item.question,
+            question: item.question,
             options,
             correctIndex
         };
@@ -140,12 +149,13 @@ function renderQuestion(){
 }
 
  function handleSubmitAnswer (e){
-    const selectedOption = document.querySelector('input[name ="answer"]: checked');
-    const selectedIndex = Number(selectedOption.value);
+    const selectedOption = document.querySelector('input[name ="answer"]:checked');
+
     if(!selectedOption){
         alert("You must select an answer before submitting");
         return;
     }
+    const selectedIndex = Number(selectedOption.value);
     const currentQuestion = questions[currentQuestionIndex];
     const isCorrect = selectedIndex === currentQuestion.correctIndex;
     if(isCorrect){
@@ -153,7 +163,7 @@ function renderQuestion(){
     }
     userAnswer.push({
         questionIndex: currentQuestionIndex,
-        selectedIndex
+        selectedIndex,
         correctIndex: currentQuestion.correctIndex,
         isCorrect
     });
@@ -211,5 +221,21 @@ function renderQuestion(){
     if(currentQuestionIndex === 0) return;
     currentQuestionIndex--;
     renderQuestion();
+ }
+ function restartQuiz(){
+    questions = [];
+    currentQuestionIndex = 0;
+    userAnswer = [];
+    score = 0;
+    selectedCategory = "";
+
+    questionText.textContent = "";
+    optionContainer.innerHTML = "";
+    currentQuestionEl.textContent = "";
+    totalQuestions.textContent = "";
+
+    startSection.classList.remove("hidden");
+    quizSection.classList.add("hidden");
+    resultSection.classList.add("hidden");
  }
 
