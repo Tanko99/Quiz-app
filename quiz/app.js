@@ -198,3 +198,12 @@ function renderQuestion(){
       });
  }
 
+ function goToNextQuestion(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length){
+        renderQuestion();
+    } else {
+        showResults();
+    }
+ }
+
